@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Complaint</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0002;
+        }
+
+        h1 {
+            text-align: center;
+            color: #173b68;
+        }
+
+        .home-btn {
+            display: block;
+            width: fit-content;
+            margin: 15px auto;
+            padding: 10px 18px;
+            background: #173b68;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .home-btn:hover {
+            background: #24558f;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            background: #173b68;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Track Your Complaint</h1>
+
+    
+
+    <p>Enter your complaint reference number:</p>
+
+    <input
+        type="text"
+        id="referenceNumber"
+        placeholder="Example: GRV-123456789"
+    >
+
+    <button onclick="trackComplaint()">Track Complaint</button>
+
+    <div id="result"></div>
+<a href="index.html" class="home-btn">← Back to Home</a>
+</div>
+
+<script>
+async function trackComplaint() {
+
+    const referenceNumber =
+        document.getElementById("referenceNumber").value.trim();
+
+    const result = document.getElementById("result");
+
+    if (!referenceNumber) {
+        result.textContent =
+            "Please enter your complaint reference number.";
+        return;
+    }
+
+    result.textContent = "Searching for your complaint...";
+
+    try {
+        const response = await fetch(
+            "/api/complaints/track/" +
+            encodeURIComponent(referenceNumber)
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Complaint not found.");
+        }
+
+        result.innerHTML = `
+            <h3>Complaint Details</h3>
+            <p><b>Reference Number:</b> ${data.complaintReferenceNumber}</p>
+            <p><b>Title:</b> ${data.title}</p>
+            <p><b>Category:</b> ${data.category}</p>
+            <p><b>Status:</b> ${data.status}</p>
+            <p><b>Priority:</b> ${data.priority}</p>
+            <p><b>Department:</b> ${data.department}</p>
+        `;
+
+    } catch (error) {
+        result.textContent = error.message;
+    }
+}
+</script>
+
+</body>
+</html>

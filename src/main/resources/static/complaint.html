@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaint - Government Grievance Portal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            color: #263238;
+        }
+
+        header {
+            background: #123b63;
+            color: white;
+            text-align: center;
+            padding: 22px 12px;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        header p {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 35px auto;
+            padding: 28px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #123b63;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 17px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bdc7d1;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 23px;
+            padding: 13px;
+            background: #176b45;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #105536;
+        }
+
+        button:disabled {
+            background: #888;
+            cursor: not-allowed;
+        }
+
+        #result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .success {
+            display: block !important;
+            background: #e2f5e9;
+            color: #145c32;
+        }
+
+        .error {
+            display: block !important;
+            background: #fde8e8;
+            color: #9b1c1c;
+        }
+
+        .reminder {
+            margin-top: 18px;
+            padding: 12px;
+            background: #fff3cd;
+            color: #805b00;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #123b63;
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 18px;
+            color: #667;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Government Grievance Management System</h1>
+    <p>Citizen Complaint Submission Portal</p>
+</header>
+
+<div class="container">
+
+    <h2>Submit Your Complaint</h2>
+
+    <form id="complaintForm">
+
+        <label for="citizenReferenceNumber">
+            Citizen Reference Number
+        </label>
+
+        <input
+            type="text"
+            id="citizenReferenceNumber"
+            placeholder="Enter your registration reference number"
+            required
+        >
+
+        <label for="title">Complaint Title</label>
+
+        <input
+            type="text"
+            id="title"
+            placeholder="Enter complaint title"
+            required
+        >
+
+        <label for="description">Complaint Description</label>
+
+        <textarea
+            id="description"
+            placeholder="Explain your complaint in detail"
+            maxlength="2000"
+            required
+        ></textarea>
+
+        <label for="category">Complaint Category</label>
+
+        <select id="category" required>
+            <option value="">Select a category</option>
+            <option value="Water">Water</option>
+            <option value="Road">Road</option>
+            <option value="Electricity">Electricity</option>
+            <option value="Sanitation">Sanitation</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="location">Complaint Location</label>
+
+        <input
+            type="text"
+            id="location"
+            placeholder="Enter the location of the issue"
+            required
+        >
+
+        <label for="peopleAffected">
+            Number of People Affected
+        </label>
+
+        <input
+            type="number"
+            id="peopleAffected"
+            min="1"
+            placeholder="Enter estimated number of people"
+            required
+        >
+
+        <button type="submit" id="submitButton">
+            Submit Complaint
+        </button>
+
+    </form>
+
+    <div id="result" role="status" aria-live="polite"></div>
+
+    <a href="index.html" class="back-link">
+        ← Back to Home
+    </a>
+
+</div>
+
+<footer>
+    Government Grievance Management System
+</footer>
+
+<script>
+    const form = document.getElementById("complaintForm");
+    const result = document.getElementById("result");
+    const submitButton = document.getElementById("submitButton");
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        result.replaceChildren();
+        result.className = "";
+        result.style.display = "none";
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+
+        const complaintData = {
+
+            citizenReferenceNumber:
+                document.getElementById("citizenReferenceNumber").value.trim(),
+
+            title:
+                document.getElementById("title").value.trim(),
+
+            description:
+                document.getElementById("description").value.trim(),
+
+            category:
+                document.getElementById("category").value,
+
+            location:
+                document.getElementById("location").value.trim(),
+
+            peopleAffected:
+                document.getElementById("peopleAffected").value.trim()
+        };
+
+        try {
+
+            const response = await fetch("/api/complaints/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(complaintData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to submit complaint."
+                );
+            }
+
+            result.replaceChildren();
+            result.className = "success";
+
+            const heading = document.createElement("strong");
+
+            heading.textContent = data.duplicate
+                ? "Supporting report already submitted!"
+                : "Complaint submitted successfully!";
+
+            result.appendChild(heading);
+            result.appendChild(document.createElement("br"));
+
+            // Display only the citizen's individual tracking details.
+            const details = [
+                ["Your Complaint Reference Number: ",
+                    data.complaintReferenceNumber],
+
+                ["Status: ", data.status],
+
+                ["People Affected: ", data.peopleAffected],
+
+                ["Automatically Calculated Priority: ", data.priority],
+
+                ["Automatically Assigned Department: ", data.department]
+            ];
+
+            details.forEach(function(item) {
+
+                result.appendChild(
+                    document.createTextNode(
+                        item[0] + (item[1] ?? "Not available")
+                    )
+                );
+
+                result.appendChild(document.createElement("br"));
+            });
+
+            // Do not display the main complaint reference number.
+            // Show the supporting-report message when linked to an existing complaint.
+            if (
+                data.mainComplaintReferenceNumber &&
+                data.mainComplaintReferenceNumber !==
+                    data.complaintReferenceNumber
+            ) {
+
+                const message = document.createElement("p");
+
+                message.textContent = data.message ||
+                    "Your report has been linked to an existing complaint.";
+
+                result.appendChild(message);
+
+            } else if (data.duplicate) {
+
+                const message = document.createElement("p");
+
+                message.textContent = data.message ||
+                    "Your report has already been submitted.";
+
+                result.appendChild(message);
+            }
+
+            const reminder = document.createElement("div");
+
+            reminder.className = "reminder";
+
+            reminder.textContent =
+                "Important: Please save your Complaint Reference Number. " +
+                "You will need it to track your complaint later.";
+
+            result.appendChild(reminder);
+
+            form.reset();
+
+        } catch (error) {
+
+            result.replaceChildren();
+            result.className = "error";
+
+            result.textContent = error.message ||
+                "Something went wrong. Please try again.";
+
+        } finally {
+
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Complaint";
+        }
+    });
+</script>
+
+</body>
+</html>

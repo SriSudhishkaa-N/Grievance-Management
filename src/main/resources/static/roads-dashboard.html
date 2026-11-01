@@ -1,0 +1,812 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roads Department Dashboard</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+        }
+
+        header {
+            background: #123b70;
+            color: white;
+            padding: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h2 { margin: 0; }
+        header form { margin: 0; }
+
+        .logout {
+            color: #123b70;
+            background: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container { padding: 25px; }
+
+        .report-section {
+            background: white;
+            padding: 22px;
+            border-radius: 9px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .report-section h2,
+        .section h2 { color: #123b70; }
+
+        .report-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .report-filters label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #123b70;
+        }
+
+        .report-filters input,
+        .report-filters select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+
+        .report-btn {
+            padding: 12px 20px;
+            background: #187443;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .report-btn:hover { background: #125c35; }
+
+        .report-btn:disabled,
+        .update-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #reportMessage {
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .success { color: #187443; }
+        .error { color: #c62828; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 9px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #555;
+            font-size: 15px;
+        }
+
+        .card p {
+            color: #123b70;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0 0;
+        }
+
+        .section {
+            background: white;
+            padding: 22px;
+            border-radius: 9px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1400px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #e8eff8;
+            color: #123b70;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+
+        .update-btn {
+            padding: 9px 14px;
+            margin: 3px;
+            background: #123b70;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .update-btn:hover { background: #0b2850; }
+
+        .priority {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .high { background: #ffe0e0; color: #c62828; }
+        .medium { background: #fff0cc; color: #a65b00; }
+        .low { background: #dff5e5; color: #187443; }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .submitted { background: #dceaff; color: #1455a0; }
+        .in-progress { background: #eee1ff; color: #6533a0; }
+
+        .resolved,
+        .assigned {
+            background: #dff5e5;
+            color: #187443;
+        }
+
+        .waiting { background: #fff0cc; color: #a65b00; }
+        .closed { background: #e5e7eb; color: #4b5563; }
+
+        #message {
+            color: #666;
+            padding: 15px 0;
+        }
+
+        .queue-note {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f7ed;
+            border: 1px solid #9bd5ad;
+            border-radius: 7px;
+            color: #187443;
+            font-weight: bold;
+        }
+
+        .report-details-cell {
+            background: #f5f8fc;
+            padding: 20px;
+        }
+
+        .report-details-cell h3 { color: #123b70; }
+
+        .report-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        @media(max-width: 600px) {
+            .container { padding: 12px; }
+            header { padding: 16px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Public Works Department</h2>
+
+    <form action="/logout" method="post">
+        <button type="submit" class="logout">Logout</button>
+    </form>
+</header>
+
+<div class="container">
+
+    <h2>Welcome, Roads Department Officer</h2>
+    <p>Manage road-related public grievances.</p>
+
+    <!-- Roads Department PDF Report -->
+    <section class="report-section">
+
+        <h2>Roads Department Report</h2>
+
+        <p>
+            Download a PDF report containing only Public Works Department complaints.
+        </p>
+
+        <div class="report-filters">
+
+            <div>
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate">
+            </div>
+
+            <div>
+                <label for="endDate">End Date</label>
+                <input type="date" id="endDate">
+            </div>
+
+            <div>
+                <label for="reportStatus">Complaint Status</label>
+                <select id="reportStatus">
+                    <option value="">All Statuses</option>
+                    <option value="SUBMITTED">SUBMITTED</option>
+                    <option value="IN_PROGRESS">IN_PROGRESS</option>
+                    <option value="RESOLVED">RESOLVED</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="reportPriority">Priority</label>
+                <select id="reportPriority">
+                    <option value="">All Priorities</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="LOW">LOW</option>
+                </select>
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="report-btn"
+            id="downloadReportBtn"
+            onclick="downloadReport()">
+            Download Roads Department PDF Report
+        </button>
+
+        <div id="reportMessage" aria-live="polite"></div>
+
+    </section>
+
+    <!-- Dashboard Cards -->
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Complaints</h3>
+            <p id="total">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Submitted</h3>
+            <p id="registered">0</p>
+        </div>
+
+        <div class="card">
+            <h3>In Progress</h3>
+            <p id="inProgress">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Resolved</h3>
+            <p id="resolved">0</p>
+        </div>
+
+    </div>
+
+    <!-- Roads Complaints -->
+    <div class="section">
+
+        <h2>All Roads Department Complaints</h2>
+
+        <p>
+            Complaints are displayed in priority order:
+            <strong>HIGH → MEDIUM → LOW</strong>
+        </p>
+
+        <p id="message">Loading complaints...</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Complaint ID</th>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>People Affected</th>
+                    <th>Supporting Reports</th>
+                    <th>Priority</th>
+                    <th>Complaint Status</th>
+                    <th>Assignment Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="complaintTable"></tbody>
+        </table>
+
+        <div class="queue-note">
+            Priority Order: HIGH → MEDIUM → LOW
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+// Download Roads Department PDF Report
+async function downloadReport() {
+
+    const button = document.getElementById("downloadReportBtn");
+    const message = document.getElementById("reportMessage");
+
+    const startDate = document.getElementById("startDate").value;
+    const endDate = document.getElementById("endDate").value;
+    const status = document.getElementById("reportStatus").value;
+    const priority = document.getElementById("reportPriority").value;
+
+    if (startDate && endDate && startDate > endDate) {
+        message.textContent = "Start date cannot be later than end date.";
+        message.className = "error";
+        return;
+    }
+
+    const params = new URLSearchParams();
+
+    if (startDate) params.append("startDate", startDate);
+    if (endDate) params.append("endDate", endDate);
+    if (status) params.append("status", status);
+    if (priority) params.append("priority", priority);
+
+    const queryString = params.toString();
+
+    const reportUrl = "/api/department/reports/pdf" +
+        (queryString ? "?" + queryString : "");
+
+    button.disabled = true;
+    button.textContent = "Generating PDF...";
+
+    message.textContent = "Please wait while your report is generated.";
+    message.className = "";
+
+    try {
+
+        const response = await fetch(reportUrl);
+
+        if (!response.ok) {
+            throw new Error("Unable to download report. Please check your login.");
+        }
+
+        const contentType = response.headers.get("content-type") || "";
+
+        if (!contentType.includes("application/pdf")) {
+            throw new Error("The server did not return a valid PDF.");
+        }
+
+        const blob = await response.blob();
+        const downloadUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = "roads-department-report.pdf";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+
+        message.textContent = "Roads Department PDF downloaded successfully!";
+        message.className = "success";
+
+    } catch (error) {
+
+        message.textContent = error.message;
+        message.className = "error";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Download Roads Department PDF Report";
+
+    }
+}
+
+
+// Get Priority Ranking
+function getPriorityRank(priority) {
+
+    const ranks = {
+        HIGH: 1,
+        MEDIUM: 2,
+        LOW: 3
+    };
+
+    return ranks[String(priority || "").toUpperCase()] || 4;
+}
+
+
+// Load Supporting Reports
+async function loadSupportingReports(referenceNumber, button, row) {
+
+    button.disabled = true;
+    button.textContent = "Loading...";
+
+    try {
+
+        const response = await fetch(
+            "/api/department/complaints/" +
+            encodeURIComponent(referenceNumber) +
+            "/reports"
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Unable to load reports.");
+        }
+
+        const detailsRow = document.createElement("tr");
+        const detailsCell = document.createElement("td");
+
+        detailsCell.colSpan = 9;
+        detailsCell.className = "report-details-cell";
+
+        const heading = document.createElement("h3");
+
+        heading.textContent =
+            "Supporting Reports: " + result.supportingReportCount;
+
+        detailsCell.appendChild(heading);
+
+        if (!result.reports || result.reports.length === 0) {
+
+            const emptyMessage = document.createElement("p");
+            emptyMessage.textContent = "No supporting reports found.";
+            detailsCell.appendChild(emptyMessage);
+
+        } else {
+
+            result.reports.forEach(report => {
+
+                const reportItem = document.createElement("div");
+                reportItem.className = "report-item";
+
+                const reportReference = document.createElement("p");
+                reportReference.textContent =
+                    "Report Reference: " + report.reportReferenceNumber;
+
+                const citizenReference = document.createElement("p");
+                citizenReference.textContent =
+                    "Citizen Reference: " + report.citizenReferenceNumber;
+
+                const peopleAffected = document.createElement("p");
+                peopleAffected.textContent =
+                    "People Reported: " + report.peopleAffected;
+
+                reportItem.appendChild(reportReference);
+                reportItem.appendChild(citizenReference);
+                reportItem.appendChild(peopleAffected);
+
+                detailsCell.appendChild(reportItem);
+
+            });
+
+        }
+
+        detailsRow.appendChild(detailsCell);
+
+        const oldDetailsRow = row.nextElementSibling;
+
+        if (oldDetailsRow &&
+            oldDetailsRow.classList.contains("report-details-row")) {
+            oldDetailsRow.remove();
+        }
+
+        detailsRow.className = "report-details-row";
+        row.after(detailsRow);
+
+        button.textContent = "Hide Reports";
+
+    } catch (error) {
+
+        alert(error.message);
+        button.textContent = "View Reports";
+
+    } finally {
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+// Load Roads Department Complaints
+async function loadComplaints() {
+
+    const message = document.getElementById("message");
+
+    message.textContent = "Loading complaints...";
+
+    try {
+
+        const response = await fetch(
+            "/api/department/roads/complaints"
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to load complaints.");
+        }
+
+        const complaints = await response.json();
+
+        // Sort by priority and people affected
+        complaints.sort((a, b) => {
+
+            const priorityDifference =
+                getPriorityRank(a.priority) -
+                getPriorityRank(b.priority);
+
+            if (priorityDifference !== 0) {
+                return priorityDifference;
+            }
+
+            return Number(b.peopleAffected || 0) -
+                   Number(a.peopleAffected || 0);
+
+        });
+
+        // Dashboard Cards
+        document.getElementById("total").textContent = complaints.length;
+
+        document.getElementById("registered").textContent =
+            complaints.filter(c => c.status === "SUBMITTED").length;
+
+        document.getElementById("inProgress").textContent =
+            complaints.filter(c => c.status === "IN_PROGRESS").length;
+
+        document.getElementById("resolved").textContent =
+            complaints.filter(c => c.status === "RESOLVED").length;
+
+        const table = document.getElementById("complaintTable");
+        table.innerHTML = "";
+
+        complaints.forEach(c => {
+
+            const row = document.createElement("tr");
+
+            // Complaint Reference
+            const referenceCell = document.createElement("td");
+            referenceCell.textContent = c.complaintReferenceNumber ?? "-";
+            row.appendChild(referenceCell);
+
+            // Title
+            const titleCell = document.createElement("td");
+            titleCell.textContent = c.title ?? "-";
+            row.appendChild(titleCell);
+
+            // Location
+            const locationCell = document.createElement("td");
+            locationCell.textContent = c.location ?? "-";
+            row.appendChild(locationCell);
+
+            // Updated People Affected
+            const peopleCell = document.createElement("td");
+            peopleCell.textContent = c.peopleAffected ?? "-";
+            row.appendChild(peopleCell);
+
+            // Supporting Reports
+            const reportsCell = document.createElement("td");
+
+            const reportsButton = document.createElement("button");
+            reportsButton.textContent = "View Reports";
+            reportsButton.className = "update-btn";
+
+            reportsButton.onclick = () => {
+
+                const nextRow = row.nextElementSibling;
+
+                if (nextRow &&
+                    nextRow.classList.contains("report-details-row")) {
+
+                    nextRow.remove();
+                    reportsButton.textContent = "View Reports";
+                    return;
+
+                }
+
+                loadSupportingReports(
+                    c.complaintReferenceNumber,
+                    reportsButton,
+                    row
+                );
+
+            };
+
+            reportsCell.appendChild(reportsButton);
+            row.appendChild(reportsCell);
+
+            // Priority
+            const priorityCell = document.createElement("td");
+
+            const priorityBadge = document.createElement("span");
+            priorityBadge.className =
+                "priority " + String(c.priority || "").toLowerCase();
+
+            priorityBadge.textContent = c.priority ?? "-";
+
+            priorityCell.appendChild(priorityBadge);
+            row.appendChild(priorityCell);
+
+            // Complaint Status
+            const statusCell = document.createElement("td");
+
+            const statusBadge = document.createElement("span");
+
+            const statusClass = {
+                SUBMITTED: "submitted",
+                IN_PROGRESS: "in-progress",
+                RESOLVED: "resolved"
+            };
+
+            statusBadge.className =
+                "status " + (statusClass[c.status] || "");
+
+            statusBadge.textContent = c.status ?? "-";
+
+            statusCell.appendChild(statusBadge);
+            row.appendChild(statusCell);
+
+            // Assignment Status
+            const assignmentCell = document.createElement("td");
+
+            const assignmentBadge = document.createElement("span");
+
+            const assignmentStatus =
+                String(c.assignmentStatus || "").toUpperCase();
+
+            const assignmentClass = {
+                ASSIGNED: "assigned",
+                WAITING: "waiting",
+                CLOSED: "closed"
+            };
+
+            assignmentBadge.className =
+                "status " + (assignmentClass[assignmentStatus] || "");
+
+            assignmentBadge.textContent = assignmentStatus || "-";
+
+            assignmentCell.appendChild(assignmentBadge);
+            row.appendChild(assignmentCell);
+
+            // Action
+            const actionCell = document.createElement("td");
+
+            const select = document.createElement("select");
+
+            ["SUBMITTED", "IN_PROGRESS", "RESOLVED"].forEach(status => {
+
+                const option = document.createElement("option");
+                option.value = status;
+                option.textContent = status;
+
+                select.appendChild(option);
+
+            });
+
+            select.value = c.status;
+
+            const button = document.createElement("button");
+            button.textContent = "Update";
+            button.className = "update-btn";
+
+            button.onclick = () => {
+                updateStatus(c.complaintReferenceNumber, select.value);
+            };
+
+            actionCell.appendChild(select);
+            actionCell.appendChild(button);
+
+            row.appendChild(actionCell);
+            table.appendChild(row);
+
+        });
+
+        message.textContent = complaints.length === 0
+            ? "No road complaints found."
+            : "";
+
+    } catch (error) {
+
+        message.textContent = error.message;
+
+    }
+
+}
+
+
+// Update Complaint Status
+async function updateStatus(referenceNumber, status) {
+
+    try {
+
+        const response = await fetch(
+            "/api/department/complaints/" +
+            encodeURIComponent(referenceNumber) +
+            "/status",
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ status: status })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Status update failed.");
+        }
+
+        alert("Complaint status updated successfully!");
+
+        await loadComplaints();
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+}
+
+
+// Load Complaints When Dashboard Opens
+loadComplaints();
+
+</script>
+
+</body>
+</html>

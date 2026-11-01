@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Registration | Grievance Portal</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #243047;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #123b70;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 5px 20px rgba(15, 35, 65, 0.08);
+        }
+
+        h2 {
+            color: #123b70;
+            margin-bottom: 8px;
+        }
+
+        .intro {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #1767ad;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #1767ad;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #123b70;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #message {
+            display: none;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 7px;
+            overflow-wrap: anywhere;
+        }
+
+        #message.success {
+            display: block;
+            background: #e8f7ed;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        #message.error {
+            display: block;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .reference {
+            display: block;
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #1767ad;
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Grievance Portal</h1>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/register.html">Register</a>
+        <a href="/complaint.html">Submit Complaint</a>
+        <a href="/track.html">Track Complaint</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="form-card">
+        <h2>Citizen Registration</h2>
+
+        <p class="intro">
+            Enter your details to register in the grievance management system.
+        </p>
+
+        <div id="message" role="status" aria-live="polite"></div>
+
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    placeholder="Enter your full name"
+                    required
+                    maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile Number *</label>
+                <input
+                    type="tel"
+                    id="mobile"
+                    name="mobile"
+                    placeholder="Enter 10-digit mobile number"
+                    pattern="[0-9]{10}"
+                    minlength="10"
+                    maxlength="10"
+                    inputmode="numeric"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email (Optional)</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address (Optional)</label>
+                <textarea
+                    id="address"
+                    name="address"
+                    placeholder="Enter your address"></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn">
+                Register Now
+            </button>
+        </form>
+
+        <a class="back-link" href="/">← Back to Home</a>
+    </section>
+</main>
+
+<footer>
+    Government Grievance Management and Priority Resolution System
+</footer>
+
+<script>
+    const form = document.getElementById("registrationForm");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        message.style.display = "block";
+        message.className = "";
+        message.textContent = "Registering your details...";
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Registering...";
+
+        const data = {
+            fullName: document.getElementById("fullName").value.trim(),
+            mobile: document.getElementById("mobile").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            address: document.getElementById("address").value.trim()
+        };
+
+        try {
+            const response = await fetch("/api/citizens/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message || "Registration failed. Please try again."
+                );
+            }
+message.className = "success";
+message.style.display = "block";
+            message.replaceChildren();
+
+            const title = document.createElement("strong");
+            title.textContent = "Registration Successful!";
+
+            const name = document.createElement("p");
+            name.textContent = "Welcome, " + result.fullName + ".";
+
+            const referenceLabel = document.createElement("p");
+            referenceLabel.textContent = "Your Citizen Reference Number:";
+
+            const reference = document.createElement("span");
+            reference.className = "reference";
+            reference.textContent = result.citizenReferenceNumber;
+
+            const instruction = document.createElement("p");
+            instruction.textContent =
+                "Please save this reference number for future use.";
+
+            message.append(
+                title,
+                name,
+                referenceLabel,
+                reference,
+                instruction
+            );
+
+            message.style.display = "block";
+            form.reset();
+
+        } catch (error) {
+            message.className = "error";
+            message.style.display = "block";
+            message.textContent =
+                error.message || "Unable to register. Please try again.";
+
+            message.style.display = "block";
+
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Register Now";
+        }
+    });
+</script>
+
+</body>
+</html>

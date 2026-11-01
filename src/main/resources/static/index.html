@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Grievance Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #243047;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #123b70;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #dbeafe;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #123b70, #2878bd);
+            color: white;
+            text-align: center;
+            padding: 75px 20px;
+        }
+
+        .hero h2 {
+            font-size: clamp(30px, 5vw, 46px);
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0 auto 25px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 22px;
+            margin: 5px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: white;
+            color: #123b70;
+        }
+
+        .secondary {
+            border: 1px solid white;
+            color: white;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 45px 20px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .heading h2 {
+            color: #123b70;
+            font-size: 29px;
+        }
+
+        .heading p {
+            color: #64748b;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(15, 35, 65, 0.05);
+        }
+
+        .card .icon {
+            font-size: 30px;
+        }
+
+        .card h3 {
+            color: #123b70;
+            margin: 10px 0;
+        }
+
+        .card p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .card a {
+            color: #1767ad;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .steps {
+            background: #eaf1fa;
+        }
+
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .step-number {
+            background: #1767ad;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-weight: bold;
+        }
+
+        .step-grid h3 {
+            color: #123b70;
+        }
+
+        .step-grid p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        footer {
+            background: #102b4e;
+            color: #dbeafe;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            .hero {
+                padding: 50px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>Grievance Portal</h1>
+        <p>Government Grievance Management System</p>
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/register.html">Register</a>
+        <a href="/complaint.html">Submit Complaint</a>
+        <a href="/track.html">Track Complaint</a>
+        <a href="/admin-login.html">Admin Login</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <h2>Your Voice Matters</h2>
+
+        <p>
+            Register as a citizen, submit grievances and track
+            complaint progress through a simple online portal.
+        </p>
+
+        <a href="/register.html" class="button primary">
+            Register as Citizen
+        </a>
+
+        <a href="/complaint.html" class="button secondary">
+            Submit a Complaint
+        </a>
+    </section>
+
+    <section class="container">
+        <div class="heading">
+            <h2>Our Services</h2>
+            <p>Choose a service to get started.</p>
+        </div>
+
+        <div class="cards">
+            <article class="card">
+    <div class="icon">🔐</div>
+    <h3>Admin Login</h3>
+    <p>
+        Authorized administrators can log in to manage
+        and resolve citizen grievances.
+    </p>
+    <a href="/admin-login.html">Admin Login →</a>
+</article>
+
+            <article class="card">
+                <div class="icon">📝</div>
+                <h3>Submit Grievance</h3>
+                <p>
+                    Report a public-service problem for review
+                    and resolution.
+                </p>
+                <a href="/complaint.html">Submit Complaint →</a>
+            </article>
+
+            <article class="card">
+                <div class="icon">🔎</div>
+                <h3>Track Complaint</h3>
+                <p>
+                    Visit the tracking page to check complaint progress.
+                </p>
+                <a href="/track.html">Track Status →</a>
+            </article>
+
+            <article class="card">
+                <div class="icon">⚙️</div>
+                <h3>Admin Dashboard</h3>
+                <p>
+                    Open the administrative page for grievance management.
+                </p>
+                <a href="/admin.html">Open Admin Page →</a>
+            </article>
+        </div>
+    </section>
+
+    <section class="steps">
+        <div class="container">
+            <div class="heading">
+                <h2>How It Works</h2>
+                <p>Follow these four steps.</p>
+            </div>
+
+            <div class="step-grid">
+                <div>
+                    <div class="step-number">1</div>
+                    <h3>Register</h3>
+                    <p>Create your citizen registration.</p>
+                </div>
+
+                <div>
+                    <div class="step-number">2</div>
+                    <h3>Submit</h3>
+                    <p>Describe your grievance clearly.</p>
+                </div>
+
+                <div>
+                    <div class="step-number">3</div>
+                    <h3>Track</h3>
+                    <p>Check your complaint's progress.</p>
+                </div>
+
+                <div>
+                    <div class="step-number">4</div>
+                    <h3>Resolution</h3>
+                    <p>Follow updates on your grievance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>Government Grievance Management and Priority Resolution System</p>
+    <p>Academic Mini Project | Citizen Services Portal</p>
+</footer>
+
+</body>
+</html>
